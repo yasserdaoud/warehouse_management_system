@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Create account | HAMRA Stock{% endblock %}
+{% block bare %}
+<main class="auth">
+    <section class="card">
+        <h1>Create account</h1>
+        <p class="muted">Set up access to HAMRA Stock.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="field" style="margin-bottom:12px;">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                    {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+                </div>
+            {% endfor %}
+            <button class="btn primary" type="submit">Create Account</button>
+            <a class="btn" href="{% url 'login' %}">Sign in</a>
+        </form>
+    </section>
+</main>
+{% endblock %}

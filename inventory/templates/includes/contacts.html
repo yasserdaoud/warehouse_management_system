@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Suppliers | HAMRA Stock{% endblock %}
+
+{% block content %}
+
+<h2>Suppliers</h2>
+<p class="muted">Manage supplier contacts and their stock relationships.</p>
+
+<div class="toolbar">   
+    <form class="search" method="get">
+        <input type="search" name="q" value="{{ query }}"  placeholder="Search supplier">
+        <!-- <select name="status" aria-label="Stock status">
+            <option value="">All statuses</option>
+            <option value="low" {% if status == "low" %}selected{% endif %}>Low stock</option>
+        </select> -->
+        <button class="btn" type="submit">Search</button>
+        <!-- {% if query %}
+            <a href="{% url 'contacts' %}" class="btn btn-light">Clear</a>
+        {% endif %} -->
+    </form>
+    <a href="{% url 'supplier_create' %}" class="btn primary"> + Add Supplier </a>
+</div>
+
+
+<!-- <div class="mb-4">
+    <form method="get" class="d-flex gap-2">
+        <input
+            type="search"
+            name="q"
+            value="{{ query }}"
+            class="form-control"
+            placeholder="Search supplier, contact, phone or email..."
+        >
+        <button type="submit" class="btn btn-secondary">Search</button>
+        {% if query %}
+            <a href="{% url 'contacts' %}" class="btn btn-light">Clear</a>
+        {% endif %}
+    </form>
+</div> -->
+
+<div class="table-wrap" >
+    <table>
+        <thead>
+           
+                <th>Supplier</th>
+                <th>Contact Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Stock quantity</th>
+                <th>Actions</th>
+            
+        </thead>
+
+        <tbody>
+        {% for supplier in suppliers %}
+            <tr>
+                <td><strong>{{ supplier.name }}</strong></td>
+                <td>{{ supplier.contact_name|default:"-" }}</td>
+                <td>
+                    {% if supplier.phone %}
+                        <a href="tel:{{ supplier.phone }}">{{ supplier.phone }}</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if supplier.email %}
+                        <a href="mailto:{{ supplier.email }}">{{ supplier.email }}</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ supplier.address|default:"-"|linebreaksbr }}</td>
+                <td>{{ supplier.stock_item_count|default:0 }}</td>
+                <td><a class="btn" href="{% url 'supplier_detail' supplier.pk %}">Open</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="empty">
+                    {% if query %}
+                        No suppliers found for "{{ query }}".
+                    {% else %}
+                        No suppliers yet. Click "Add Supplier" to create your first supplier.
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

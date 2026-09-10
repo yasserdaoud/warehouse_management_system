@@ -1,0 +1,22 @@
+<header class="topbar">
+    <div class="topbar-title">
+        <strong>{% block page_label %}Inventory Control{% endblock %}</strong>
+        <span class="muted">Signed in as {{ request.user.username }}</span>
+    </div>
+    <!-- <div class="topbar-actions">
+        <a class="btn ghost" href="{% url 'view_stock' %}">View Stock</a>
+        <a class="btn primary" href="{% url 'stock_create' %}">+ New Item</a>
+    </div> -->
+    <div class="user-toggle">
+    <div class="user-avatar sm">
+        <span class="user-avatar-icon">👤</span>
+    </div>
+
+    <div class="user-info">
+        <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+        <div class="user-role">Administrator</div>
+    </div>
+
+    <!-- <span class="user-chevron">⌄</span> -->
+</div>
+</header>

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Contracts | HAMRA Stock{% endblock %}
+
+{% block content %}
+
+<h2>Contracts</h2>
+
+<p class="muted">
+    Search contracts by number, supplier, or status.
+</p>
+
+
+<div class="toolbar">
+
+    <form class="search" method="get">
+
+        <input
+            type="search"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search contracts"
+        >
+
+        <button class="btn" type="submit">
+            Search
+        </button>
+
+    </form>
+
+
+    <a class="btn primary" href="{% url 'contract_create' %}">
+        + Add Contract
+    </a>
+
+</div>
+
+
+<div class="table-wrap">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Supplier</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Value</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+            {% for contract in contracts %}
+
+                <tr>
+
+                    <!-- NUMBER -->
+                    <td>
+                        <strong>
+                            {{ contract.number }}
+                        </strong>
+                    </td>
+
+
+                    <!-- SUPPLIER -->
+                    <td>
+                        {{ contract.supplier|default:"-" }}
+                    </td>
+
+
+                    <!-- START DATE -->
+                    <td>
+                        {{ contract.start_date|date:"M d, Y"|default:"-" }}
+                    </td>
+
+
+                    <!-- END DATE -->
+                    <td>
+                        {{ contract.end_date|date:"M d, Y"|default:"-" }}
+                    </td>
+
+
+                    <!-- VALUE -->
+                    <td>
+                        {{ contract.value|floatformat:2 }} DA
+                    </td>
+
+
+                    <!-- STATUS -->
+                    <td>
+
+                        {% if contract.status == "active" %}
+
+                            <span class="badge ok">
+                                Active
+                            </span>
+
+                        {% elif contract.status == "expired" %}
+
+                            <span class="badge low">
+                                Expired
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge">
+                                Terminated
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+                    <td>
+
+                        <a
+                            class="btn"
+                            href="{{ contract.get_absolute_url }}"
+                        >
+                            Open
+                        </a>
+
+                    </td>
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty"
+                    >
+                        No contracts found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

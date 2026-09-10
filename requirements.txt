@@ -1,0 +1,13 @@
+# asgiref==
+# confusable-homoglyphs==
+# distlib==
+# Django==3.2.4
+# django-crispy-forms==1.14.0pip 
+# django-registration==3.3
+# filelock==
+# mysqlclient==
+# Pillow==12.2.0
+# platformdirs==
+# pytz==
+# sqlparse==
+# virtualenv==

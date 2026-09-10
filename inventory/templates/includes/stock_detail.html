@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{{ item.name }} | HAMRA Stock{% endblock %}
+
+{% block content %}
+
+<div class="toolbar">
+    <div>
+        <h2>{{ item.name }}</h2>
+
+        <p class="muted">
+            {{ item.sku }}
+            {% if item.location %}
+                · {{ item.location }}
+            {% endif %}
+        </p>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+
+        <a class="btn primary" href="{% url 'view_stock' %}">
+            Back
+        </a>
+
+        <a class="btn" href="{% url 'stock_update' item.pk %}">
+            Edit
+        </a>
+
+        <form
+            method="post"
+            action="{% url 'stock_delete' item.pk %}"
+            onsubmit="return confirm('Are you sure you want to delete this item?');"
+        >
+            {% csrf_token %}
+
+            <button class="btn danger" type="submit">
+                Delete
+            </button>
+        </form>
+
+    </div>
+</div>
+
+
+<div class="nk-block">
+
+    <!-- ITEM INFORMATION -->
+    <div class="col-xxl-3 col-sm-6">
+
+        <div class="card">
+
+            <h4>Item Details</h4>
+
+            <!-- ITEM IMAGE -->
+            {% if item.image %}
+                <div style="
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    margin:20px 0;
+                    padding:15px;
+                ">
+
+                    <img
+                        src="{{ item.image.url }}"
+                        alt="{{ item.name }}"
+                        style="
+                            width:220px;
+                            height:220px;
+                            object-fit:contain;
+                            border-radius:12px;
+                            border:1px solid #e5e7eb;
+                            padding:8px;
+                            background:#ffffff;
+                        "
+                    >
+
+                </div>
+            {% else %}
+
+                <div style="
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    width:220px;
+                    height:220px;
+                    margin:20px auto;
+                    border-radius:12px;
+                    border:1px dashed #cbd5e1;
+                ">
+                    <span class="muted">
+                        No image available
+                    </span>
+                </div>
+
+            {% endif %}
+
+
+            <!-- STOCK STATISTICS -->
+            <div
+                class="grid stats"
+                style="grid-template-columns:repeat(3,minmax(0,1fr));"
+            >
+
+                <div class="stat">
+                    <div class="label">
+                        Quantity
+                    </div>
+
+                    <div class="value">
+                        {{ item.quantity }}
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="label">
+                        Reorder level
+                    </div>
+
+                    <div class="value">
+                        {{ item.reorder_level }}
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="label">
+                        Value
+                    </div>
+
+                    <div class="value">
+                        {{ item.stock_value|floatformat:2 }} DA
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ITEM INFORMATION -->
+
+            <p>
+                <strong>SKU:</strong>
+                {{ item.sku }}
+            </p>
+
+
+            <p>
+                <strong>Category:</strong>
+                {{ item.category|default:"-" }}
+            </p>
+
+
+            <p>
+                <strong>Supplier:</strong>
+                {{ item.supplier|default:"-" }}
+            </p>
+
+
+            <p>
+                <strong>Contract Number:</strong>
+                {{ item.contract_number|default:"-" }}
+            </p>
+
+
+            <p>
+                <strong>Unit:</strong>
+                {{ item.get_unit_display }}
+            </p>
+
+
+            <p>
+                <strong>Unit Cost:</strong>
+                {{ item.unit_cost|floatformat:2 }} DA
+            </p>
+
+
+            <p>
+                <strong>Location:</strong>
+                {{ item.location|default:"-" }}
+            </p>
+
+
+            {% if item.notes %}
+                <p>
+                    <strong>Notes:</strong>
+                    <br>
+                    {{ item.notes|linebreaksbr }}
+                </p>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- STOCK MOVEMENT -->
+
+    <div class="col-xxl-3 col-sm-6">
+
+        <div class="card">
+
+            <h4>Record Movement</h4>
+
+            <form
+                method="post"
+                action="{% url 'stock_adjust' item.pk %}"
+            >
+
+                {% csrf_token %}
+
+                {{ adjustment_form.non_field_errors }}
+
+
+                {% for field in adjustment_form %}
+
+                    <div
+                        class="field"
+                        style="margin-bottom:12px;"
+                    >
+
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {{ field.errors }}
+
+                    </div>
+
+                {% endfor %}
+
+
+                <button
+                    class="btn primary"
+                    type="submit"
+                >
+                    Save Movement
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

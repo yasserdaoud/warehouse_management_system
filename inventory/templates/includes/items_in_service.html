@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}Items in Service | HAMRA Stock{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     PAGE HEADER
+     ========================================================= -->
+
+<div class="page-header">
+    <div>
+        <h2>Items in Service</h2>
+        <p class="muted">
+            Manage and monitor items currently assigned to service.
+        </p>
+    </div>
+</div>
+
+
+<!-- =========================================================
+     TOOLBAR
+     ========================================================= -->
+
+<div class="toolbar">
+
+    <form class="search" method="get">
+
+        <!-- <div class="search-box">
+            <span class="search-icon">
+                <em class="icon ni ni-search"></em>
+            </span> -->
+
+            <input
+                type="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search items in service..."
+                aria-label="Search items in service"
+            >
+        <!-- </div> -->
+
+        <button class="btn" type="submit">
+            Search
+        </button>
+
+        <!-- {% if query %}
+            <a class="btn" href="{% url 'items_in_service' %}">
+                <em class="icon ni ni-reload"></em>
+                Reset
+            </a>
+        {% endif %} -->
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     SUMMARY
+     ========================================================= -->
+
+<div class="service-summary">
+
+    <div class="service-summary-card">
+
+        <div class="service-summary-icon">
+            <em class="icon ni ni-setting"></em>
+        </div>
+
+        <div>
+            <span class="service-summary-label">
+                Movements in service
+            </span>
+
+            <strong class="service-summary-value">
+                {{ total_movements }}
+            </strong>
+        </div>
+
+    </div>
+
+    <div class="service-summary-card">
+
+        <div class="service-summary-icon">
+            <em class="icon ni ni-box"></em>
+        </div>
+
+        <div>
+            <span class="service-summary-label">
+                Total units in service
+            </span>
+
+            <strong class="service-summary-value">
+                {{ total_quantity }}
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TABLE
+     ========================================================= -->
+
+<div class="table-wrap service-table">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Item</th>
+                <th>REF</th>
+                <th>Contract</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Quantity</th>
+                <th>Value</th>
+                <th>New Location</th>
+                <th>Status</th>
+                <!-- <th>Action</th> -->
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for transaction in transactions %}
+
+                <tr>
+
+                    <td>
+
+                        {% if transaction.item.image %}
+
+                            <img
+                                src="{{ transaction.item.image.url }}"
+                                alt="{{ transaction.item.name }}"
+                                style="
+                                    width:50px;
+                                    height:50px;
+                                    object-fit:cover;
+                                    border-radius:8px;
+                                    border:1px solid #e5e7eb;
+                                "
+                            >
+
+                        {% else %}
+
+                            <div
+                                style="
+                                    width:50px;
+                                    height:50px;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    border-radius:8px;
+                                    border:1px dashed #cbd5e1;
+                                    font-size:11px;
+                                "
+                            >
+                                No image
+                            </div>
+
+                        {% endif %}
+
+                    </td>
+
+
+                     <!-- ITEM -->
+                    <td>
+
+                        <strong>
+                            {{ transaction.item.name }}
+                        </strong>
+                    </td>
+
+
+                    <!-- REF / SKU -->
+                    <td>
+                        {{ transaction.item.sku }}
+                    </td>
+
+
+                    <!-- CONTRACT NUMBER -->
+                    <td>
+                        {{ transaction.item.contract_number|default:"-" }}
+                    </td>
+
+
+                    <!-- CATEGORY -->
+                    <td>
+                        {{ transaction.item.category|default:"-" }}
+                    </td>
+
+
+                    <!-- SUPPLIER -->
+                    <td>
+                        {{ transaction.item.supplier|default:"-" }}
+                    </td>
+
+
+                    <!-- QUANTITY -->
+                    <td>
+                        {{ transaction.item.quantity }}
+                        {{ transaction.item.get_unit_display }}
+                    </td>
+
+
+                    <!-- VALUE -->
+                    <td>
+                        {{ transaction.item.stock_value|floatformat:2 }} DA
+                    </td>
+
+                    <!-- NEW LOCATION -->
+                    <td>
+                        {{ transaction.item.location|default:"No location" }}
+                    </td>
+
+                    <!-- STATUS -->
+                    <td>
+
+                        {% if transaction.item.is_low_stock %}
+
+                            <span class="badge low">
+                                Low
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge ok">
+                                OK
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+
+            {% empty %}
+
+                <!-- EMPTY STATE -->
+
+                <tr>
+
+                    <td colspan="8">
+
+                        <div class="empty service-empty">
+
+                            <div class="empty-icon">
+                                <em class="icon ni ni-setting"></em>
+                            </div>
+
+                            <h3>
+                                No items in service
+                            </h3>
+
+                            <p>
+                                There are currently no stock items assigned
+                                to service.
+                            </p>
+
+                            <a
+                                class="btn primary"
+                                href="{% url 'view_stock' %}"
+                            >
+                                <em class="icon ni ni-activity-round-fill"></em>
+                                View Stock
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

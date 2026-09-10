@@ -1,0 +1,157 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<aside class="sidebar">
+    <a class="brand" href="{% url 'dashboard' %}" aria-label="HAMRA Stock dashboard">
+        <span class="brand-mark"><img src="{% static 'images/Sonatrach.png' %}"
+     class="brand"></span>
+        <span>
+            <span class="brand-name">HAMRA Stock</span>
+            <span class="brand-subtitle">Inventory Control</span>
+        </span>
+    </a>
+    {% with current=request.resolver_match.url_name %}
+<nav class="nav" aria-label="Main navigation">
+
+    <!-- Dashboard -->
+    <a class="nav-link {% if current == 'dashboard' %}active{% endif %}"
+       href="{% url 'dashboard' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 10.5L12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5v-9Z"/>
+                <path d="M9 21v-6h6v6"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">Dashboard</span>
+    </a>
+
+
+    <!-- Stock -->
+    <a class="nav-link {% if current == 'view_stock' or current == 'stock_detail' or current == 'stock_update' %}active{% endif %}"
+       href="{% url 'view_stock' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6.5 12 3l8 3.5-8 3.5L4 6.5Z"/>
+                <path d="M4 12l8 3.5 8-3.5"/>
+                <path d="M4 17.5 12 21l8-3.5"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">Stock</span>
+    </a>
+
+
+    <!-- Items in Service -->
+    <a class="nav-link {% if current == 'items_in_service' %}active{% endif %}"
+       href="{% url 'items_in_service' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14.7 6.3a4 4 0 0 0-5.1 5.1L4 17v3h3l5.6-5.6a4 4 0 0 0 5.1-5.1l-2.2 2.2-2.1-2.1 2.3-2.1Z"/>
+                <path d="m14 5 5 5"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">Items in Service</span>
+    </a>
+
+
+    <!-- Add Item -->
+    <a class="nav-link {% if current == 'stock_create' %}active{% endif %}"
+       href="{% url 'stock_create' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h16v14H4z"/>
+                <path d="M8 6V4h8v2"/>
+                <path d="M12 10v6"/>
+                <path d="M9 13h6"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">Add Item</span>
+    </a>
+
+
+    <!-- History -->
+    <a class="nav-link {% if current == 'view_history' %}active{% endif %}"
+       href="{% url 'view_history' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12a8 8 0 1 0 2.3-5.7"/>
+                <path d="M4 5v5h5"/>
+                <path d="M12 7v5l3 2"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">History</span>
+    </a>
+
+
+    <!-- Suppliers -->
+    <a class="nav-link {% if current == 'contacts' %}active{% endif %}"
+       href="{% url 'contacts' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/>
+                <circle cx="9.5" cy="7" r="4"/>
+                <path d="M17 11a4 4 0 1 0 0-8"/>
+                <path d="M21 21v-2a4 4 0 0 0-3-3.8"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">Suppliers</span>
+    </a>
+
+
+    <!-- Contracts -->
+    <a class="nav-link {% if current == 'contracts' or current == 'contract_detail' or current == 'contract_update' %}active{% endif %}"
+        href="{% url 'contracts' %}">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/>
+                <path d="M14 3v6h6"/>
+                <path d="M9 13h6"/>
+                <path d="M9 17h6"/>
+            </svg>
+        </span>
+
+        <span class="nav-text">Contracts</span>
+    </a>
+
+    
+    <!-- Logout -->
+    <form class="nav-logout"
+          method="post"
+          action="{% url 'logout' %}">
+
+        {% csrf_token %}
+
+        <button class="nav-link" type="submit">
+
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/>
+                    <path d="M14 8l4 4-4 4"/>
+                    <path d="M18 12H9"/>
+                </svg>
+            </span>
+
+            <span class="nav-text">Logout</span>
+
+        </button>
+
+    </form>
+
+</nav>
+    {% endwith %}
+    <div class="sidebar-note">
+        <span class="status-dot"></span>
+        Stock workspace ready
+    </div>
+</aside>

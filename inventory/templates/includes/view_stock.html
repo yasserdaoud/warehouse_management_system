@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Stock | HAMRA Stock{% endblock %}
+
+{% block content %}
+
+<h2>Stock</h2>
+
+<p class="muted">
+    Search items by name, SKU, category, supplier, contract number, or location.
+</p>
+
+
+<div class="toolbar">
+
+    <form class="search" method="get">
+
+        <input
+            type="search"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search stock"
+        >
+
+        <select name="status" aria-label="Stock status">
+
+            <option value="">
+                All statuses
+            </option>
+
+            <option
+                value="low"
+                {% if status == "low" %}selected{% endif %}
+            >
+                Low stock
+            </option>
+
+        </select>
+
+        <button class="btn" type="submit">
+            Search
+        </button>
+
+    </form>
+
+
+    <a class="btn primary" href="{% url 'stock_create' %}">
+        + Add Item
+    </a>
+
+</div>
+
+
+<div class="table-wrap">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Item</th>
+                <th>REF</th>
+                <th>Contract</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Quantity</th>
+                <th>Value</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+            {% for item in items %}
+
+                <tr>
+
+                    <!-- IMAGE -->
+                    <td>
+
+                        {% if item.image %}
+
+                            <img
+                                src="{{ item.image.url }}"
+                                alt="{{ item.name }}"
+                                style="
+                                    width:50px;
+                                    height:50px;
+                                    object-fit:cover;
+                                    border-radius:8px;
+                                    border:1px solid #e5e7eb;
+                                "
+                            >
+
+                        {% else %}
+
+                            <div
+                                style="
+                                    width:50px;
+                                    height:50px;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    border-radius:8px;
+                                    border:1px dashed #cbd5e1;
+                                    font-size:11px;
+                                "
+                            >
+                                No image
+                            </div>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ITEM -->
+                    <td>
+
+                        <strong>
+                            {{ item.name }}
+                        </strong>
+
+                        <br>
+
+                        <span class="muted">
+                            {{ item.location|default:"No location" }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- REF / SKU -->
+                    <td>
+                        {{ item.sku }}
+                    </td>
+
+
+                    <!-- CONTRACT NUMBER -->
+                    <td>
+                        {{ item.contract_number|default:"-" }}
+                    </td>
+
+
+                    <!-- CATEGORY -->
+                    <td>
+                        {{ item.category|default:"-" }}
+                    </td>
+
+
+                    <!-- SUPPLIER -->
+                    <td>
+                        {{ item.supplier|default:"-" }}
+                    </td>
+
+
+                    <!-- QUANTITY -->
+                    <td>
+                        {{ item.quantity }}
+                        {{ item.get_unit_display }}
+                    </td>
+
+
+                    <!-- VALUE -->
+                    <td>
+                        {{ item.stock_value|floatformat:2 }} DA
+                    </td>
+
+
+                    <!-- STATUS -->
+                    <td>
+
+                        {% if item.is_low_stock %}
+
+                            <span class="badge low">
+                                Low
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge ok">
+                                OK
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+                    <td>
+
+                        <a
+                            class="btn"
+                            href="{{ item.get_absolute_url }}"
+                        >
+                            Open
+                        </a>
+
+                    </td>
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        class="empty"
+                    >
+                        No stock items found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
+

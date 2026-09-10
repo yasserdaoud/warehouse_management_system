@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}{{ contract.number }} | HAMRA Stock{% endblock %}
+
+{% block content %}
+
+<div class="toolbar">
+    <div>
+        <h2>{{ contract.number }}</h2>
+
+        <p class="muted">
+            {% if contract.supplier %}
+                {{ contract.supplier }}
+            {% else %}
+                No supplier linked
+            {% endif %}
+        </p>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+
+        <a class="btn primary" href="{% url 'contracts' %}">
+            Back
+        </a>
+
+        <a class="btn" href="{% url 'contract_update' contract.pk %}">
+            Edit
+        </a>
+
+        <form
+            method="post"
+            action="{% url 'contract_delete' contract.pk %}"
+            onsubmit="return confirm('Are you sure you want to delete this contract?');"
+        >
+            {% csrf_token %}
+
+            <button class="btn danger" type="submit">
+                Delete
+            </button>
+        </form>
+
+    </div>
+</div>
+
+
+<div class="nk-block">
+
+    <!-- CONTRACT INFORMATION -->
+    <div class="col-xxl-3 col-sm-6">
+
+        <div class="card">
+
+            <h4>Contract Details</h4>
+
+            <!-- STATUS -->
+            <p>
+                <strong>Status:</strong>
+
+                {% if contract.status == "active" %}
+                    <span class="badge ok">Active</span>
+                {% elif contract.status == "expired" %}
+                    <span class="badge low">Expired</span>
+                {% else %}
+                    <span class="badge">Terminated</span>
+                {% endif %}
+            </p>
+
+
+            <p>
+                <strong>Supplier:</strong>
+                {{ contract.supplier|default:"-" }}
+            </p>
+
+
+            <p>
+                <strong>Start Date:</strong>
+                {{ contract.start_date|date:"M d, Y"|default:"-" }}
+            </p>
+
+
+            <p>
+                <strong>End Date:</strong>
+                {{ contract.end_date|date:"M d, Y"|default:"-" }}
+            </p>
+
+
+            <p>
+                <strong>Value:</strong>
+                {{ contract.value|floatformat:2 }} DA
+            </p>
+
+
+            {% if contract.notes %}
+                <p>
+                    <strong>Notes:</strong>
+                    <br>
+                    {{ contract.notes|linebreaksbr }}
+                </p>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- LINKED STOCK ITEMS -->
+    <div class="col-xxl-3 col-sm-6">
+
+        <div class="card">
+
+            <h4>Linked Stock Items</h4>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in linked_items %}
+
+                            <tr>
+
+                                <td>
+                                    {{ item.name }}
+                                </td>
+
+                                <td>
+                                    {{ item.sku }}
+                                </td>
+
+                                <td>
+                                    {{ item.category|default:"-" }}
+                                </td>
+
+                                <td>
+                                    {{ item.quantity }}
+                                    {{ item.get_unit_display }}
+                                </td>
+
+                                <td>
+                                    <a class="btn btn-sm" href="{{ item.get_absolute_url }}">
+                                        Open
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+                                <td colspan="5" class="empty">
+                                    No stock items linked to this contract.
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

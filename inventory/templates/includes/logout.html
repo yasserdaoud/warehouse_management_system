@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Signed out | HAMRA Stock{% endblock %}
+{% block bare %}
+<main class="auth">
+    <section class="card">
+        <h1>Signed out</h1>
+        <p class="muted">Your session has ended.</p>
+        <a class="btn primary" href="{% url 'login' %}">Sign in again</a>
+    </section>
+</main>
+{% endblock %}

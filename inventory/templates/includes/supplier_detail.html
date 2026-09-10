@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}{{ supplier.name }} | HAMRA Stock{% endblock %}
+{% load static %}
+{% block content %}
+
+<div class="toolbar">
+    <div>
+        <h2>{{ supplier.name }}</h2>
+        <p class="muted">Supplier information</p>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+
+        <a class="btn primary" href="{% url 'contacts' %}">
+            Back
+        </a>
+
+        <a class="btn " href="{% url 'supplier_update' supplier.pk %}">
+            Edit
+        </a>
+
+        <form
+            method="post"
+            action="{% url 'supplier_delete' supplier.pk %}"
+            onsubmit="return confirm('Are you sure you want to delete this supplier?');"
+        >
+            {% csrf_token %}
+            <button class="btn danger" type="submit">
+                Delete
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<!-- <div class="grid"> -->
+<section class="grid ">
+
+    <!-- Supplier Information -->
+    <div class="card">
+
+        <h4>Supplier Details</h4>
+
+        <div class="grid stats"
+             style="grid-template-columns:repeat(2,minmax(0,1fr));">
+
+            <div class="stat">
+                <div class="label">Supplier Name</div>
+                <div class="value">
+                    {{ supplier.name }}
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="label">Contact Name</div>
+                <div class="value">
+                    {{ supplier.contact_name|default:"-" }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <p>
+            <strong>Phone:</strong>
+
+            {% if supplier.phone %}
+                <a href="tel:{{ supplier.phone }}">
+                    {{ supplier.phone }}
+                </a>
+            {% else %}
+                -
+            {% endif %}
+        </p>
+
+
+        <p>
+            <strong>Email:</strong>
+
+            {% if supplier.email %}
+                <a href="mailto:{{ supplier.email }}">
+                    {{ supplier.email }}
+                </a>
+            {% else %}
+                -
+            {% endif %}
+        </p>
+
+
+        <p>
+            <strong>Address:</strong>
+            <br>
+
+            {% if supplier.address %}
+                {{ supplier.address|linebreaksbr }}
+            {% else %}
+                -
+            {% endif %}
+        </p>
+
+    </div>
+
+
+    <!-- Contact Summary -->
+    <!-- <div class="card">
+
+        <h2>Contact</h2>
+
+        <div class="stat" style="margin-bottom:16px;">
+
+            <div class="label">
+                Contact Person
+            </div>
+
+            <div class="value">
+                {{ supplier.contact_name|default:"-" }}
+            </div>
+
+        </div>
+
+
+        <div class="stat" style="margin-bottom:16px;">
+
+            <div class="label">
+                Phone
+            </div>
+
+            <div class="value">
+
+                {% if supplier.phone %}
+                    <a href="tel:{{ supplier.phone }}">
+                        {{ supplier.phone }}
+                    </a>
+                {% else %}
+                    -
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="label">
+                Email
+            </div>
+
+            <div class="value">
+
+                {% if supplier.email %}
+                    <a href="mailto:{{ supplier.email }}">
+                        {{ supplier.email }}
+                    </a>
+                {% else %}
+                    -
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div> -->
+
+</section>
+<!-- </div> -->
+
+
+{% endblock %}

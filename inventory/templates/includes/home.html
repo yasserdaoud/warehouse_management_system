@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}HAMRA Stock{% endblock %}
+{% block bare %}
+<section class="hero">
+    <div class="hero-inner">
+        <h1>HAMRA Stock</h1>
+        <p>Track inventory levels, supplier contacts, low-stock alerts, and every stock movement from a clean Django workspace.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:24px;">
+            <a class="btn primary" href="{% url 'login' %}">Login</a>
+            <a class="btn" href="{% url 'register' %}">Sign in</a>
+            <!-- <p>If you don't have an account you should to sign in</p> -->
+        </div>
+        
+    </div>
+</section>
+{% endblock %}
